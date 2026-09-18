@@ -1,0 +1,41 @@
+export const DSH_VERSION = '0.1.5-rc.2'
+
+export const sharedPackages = [
+  ['@deepseek-ai/cordis', '4.0.2'],
+  ['@deepseek-ai/dsh', DSH_VERSION],
+  ['@deepseek-ai/dsh-agent', DSH_VERSION],
+  ['@deepseek-ai/dsh-agent-presets', DSH_VERSION],
+  ['@deepseek-ai/dsh-attachment', DSH_VERSION],
+  ['@deepseek-ai/dsh-authorization', DSH_VERSION],
+  ['@deepseek-ai/dsh-credentials', DSH_VERSION],
+  ['@deepseek-ai/dsh-fs', DSH_VERSION],
+  ['@deepseek-ai/dsh-invariants', DSH_VERSION],
+  ['@deepseek-ai/dsh-jobs', DSH_VERSION],
+  ['@deepseek-ai/dsh-launch-environment', DSH_VERSION],
+  ['@deepseek-ai/dsh-llm', DSH_VERSION],
+  ['@deepseek-ai/dsh-sandbox', DSH_VERSION],
+  ['@deepseek-ai/dsh-sandbox-policy', DSH_VERSION],
+  ['@deepseek-ai/dsh-scope', DSH_VERSION],
+  ['@deepseek-ai/dsh-session', DSH_VERSION],
+  ['@deepseek-ai/dsh-session-persistence', DSH_VERSION],
+  ['@deepseek-ai/dsh-session-projection', DSH_VERSION],
+  ['@deepseek-ai/dsh-session-projection-cache', DSH_VERSION],
+  ['@deepseek-ai/dsh-session-query', DSH_VERSION],
+  ['@deepseek-ai/dsh-settings', DSH_VERSION],
+  ['@deepseek-ai/dsh-subagent', DSH_VERSION],
+  ['@deepseek-ai/dsh-subprocess', DSH_VERSION],
+  ['@deepseek-ai/dsh-system-prompt', DSH_VERSION],
+  ['@deepseek-ai/dsh-timeout', DSH_VERSION],
+  ['@deepseek-ai/dsh-tools', DSH_VERSION],
+  ['@deepseek-ai/dsh-typert-protocol', DSH_VERSION],
+  ['@deepseek-ai/dsh-user-approval', DSH_VERSION],
+  ['@deepseek-ai/dsh-util-time', DSH_VERSION],
+]
+
+export const profilePackages = [
+  ['@deepseek-ai/dsh-llm-pi-ai', DSH_VERSION],
+  ['@deepseek-ai/dsh-mcp-client', DSH_VERSION],
+  ['@earendil-works/pi-ai', '0.85.1'],
+  ['@modelcontextprotocol/client', '2.0.0'],
+  ['@modelcontextprotocol/core', '2.0.0'],
+]

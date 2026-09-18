@@ -1,0 +1,11 @@
+packages:
+  - baselines/*
+
+nodeLinker: hoisted
+autoInstallPeers: false
+allowBuilds:
+  '@deepseek-ai/dsh-subprocess-local': false
+  '@google/genai': false
+  koffi: false
+  node-pty: false
+  protobufjs: false
