@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readFileSync, realpathSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { countOccurrences, checkJavaScript, importSmoke } from './validators.mjs'
@@ -95,14 +95,15 @@ function clonePackages(packageMap, caseDir, targetNames) {
     const record = packageMap.get(name)
     if (record === undefined) throw new Error(`staged test package not resolved: ${name}`)
     const destination = join(caseDir, 'packages', safeName(name))
-    cpSync(record.pkg.path, destination, {
+    const source = realpathSync(record.pkg.path)
+    cpSync(source, destination, {
       recursive: true,
       filter(source) {
         const leaf = basename(source)
         return leaf !== 'node_modules' && !leaf.startsWith('.local-patch-backup-')
       },
     })
-    const dependencyRoot = owningNodeModules(record.pkg.path) ?? join(record.root.path, 'node_modules')
+    const dependencyRoot = owningNodeModules(source) ?? join(record.root.path, 'node_modules')
     if (existsSync(dependencyRoot)) symlinkSync(dependencyRoot, join(destination, 'node_modules'), 'dir')
     cloned.set(name, {
       ...record,
