@@ -157,7 +157,7 @@ export function preflightDeployment(deployment, options = {}) {
     }
   }
 
-  if (!options.skipShadows) errors.push(...profileShadowErrors(deployment, packages))
+  errors.push(...profileShadowErrors(deployment, packages))
   return { ok: errors.length === 0, errors, packages, cli }
 }
 

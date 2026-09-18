@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process'
 export function supportArguments(deployment) {
   const support = deployment.packages.filter(pkg => pkg.support)
   return [
-    `pnpm@${deployment.packageManagerVersion ?? '11.24.0'}`,
+    'pnpm@11.24.0',
     '--dir', deployment.installation.projectRoot,
     'add', '--save-exact',
     ...support.map(pkg => `${pkg.name}@${pkg.version}`),
