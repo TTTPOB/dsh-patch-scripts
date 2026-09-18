@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { linkSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { commitFiles, restoreBackupDir } from '../src/transaction.mjs'
@@ -22,6 +22,17 @@ test('rolls back previously committed files when a later commit fails', () => {
   ], join(root, 'backup'), { failBeforeCommit: 1 }), /injected transaction failure/)
   assert.equal(readFileSync(a, 'utf8'), 'old-a\n')
   assert.equal(readFileSync(b, 'utf8'), 'old-b\n')
+})
+
+test('replaces the installed inode without mutating a pnpm store hardlink', () => {
+  const root = mkdtempSync(join(tmpdir(), 'dsh-patch-hardlink-'))
+  const store = join(root, 'store.js')
+  const installed = join(root, 'installed.js')
+  writeFileSync(store, 'old\n')
+  linkSync(store, installed)
+  commitFiles([{ path: installed, content: 'new\n', mode: 0o100644, label: 'installed.js' }], join(root, 'backup'))
+  assert.equal(readFileSync(store, 'utf8'), 'old\n')
+  assert.equal(readFileSync(installed, 'utf8'), 'new\n')
 })
 
 test('records and restores a successful multi-file transaction', () => {

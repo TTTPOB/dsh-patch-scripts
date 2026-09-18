@@ -1,6 +1,18 @@
 export const DSH_VERSION = '0.1.5-rc.2'
 
-export const sharedPackages = [
+export const installationTargets = [
+  ['@deepseek-ai/dsh-subagent', DSH_VERSION],
+  ['@deepseek-ai/dsh-llm-pi-ai', DSH_VERSION],
+  ['@deepseek-ai/dsh-mcp-client', DSH_VERSION],
+  ['@earendil-works/pi-ai', '0.85.1'],
+]
+
+export const supportDependencies = [
+  ['@modelcontextprotocol/client', '2.0.0'],
+  ['@modelcontextprotocol/core', '2.0.0'],
+]
+
+export const verificationSharedDependencies = [
   ['@deepseek-ai/cordis', '4.0.2'],
   ['@deepseek-ai/dsh', DSH_VERSION],
   ['@deepseek-ai/dsh-agent', DSH_VERSION],
@@ -22,7 +34,6 @@ export const sharedPackages = [
   ['@deepseek-ai/dsh-session-projection-cache', DSH_VERSION],
   ['@deepseek-ai/dsh-session-query', DSH_VERSION],
   ['@deepseek-ai/dsh-settings', DSH_VERSION],
-  ['@deepseek-ai/dsh-subagent', DSH_VERSION],
   ['@deepseek-ai/dsh-subprocess', DSH_VERSION],
   ['@deepseek-ai/dsh-system-prompt', DSH_VERSION],
   ['@deepseek-ai/dsh-timeout', DSH_VERSION],
@@ -32,10 +43,8 @@ export const sharedPackages = [
   ['@deepseek-ai/dsh-util-time', DSH_VERSION],
 ]
 
-export const profilePackages = [
-  ['@deepseek-ai/dsh-llm-pi-ai', DSH_VERSION],
-  ['@deepseek-ai/dsh-mcp-client', DSH_VERSION],
-  ['@earendil-works/pi-ai', '0.85.1'],
-  ['@modelcontextprotocol/client', '2.0.0'],
-  ['@modelcontextprotocol/core', '2.0.0'],
+export const baselinePackages = [
+  ...verificationSharedDependencies,
+  ...installationTargets,
+  ...supportDependencies,
 ]

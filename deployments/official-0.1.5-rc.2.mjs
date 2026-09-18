@@ -1,9 +1,15 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { DSH_VERSION, profilePackages, sharedPackages } from './package-set.mjs'
+import {
+  DSH_VERSION,
+  installationTargets,
+  supportDependencies,
+  verificationSharedDependencies,
+} from './package-set.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const baseline = resolve(here, '../baselines/dsh-0.1.5-rc.2')
+const root = { path: baseline, importer: 'baselines/dsh-0.1.5-rc.2' }
 
 export default {
   id: 'official-0.1.5-rc.2',
@@ -11,23 +17,25 @@ export default {
   dshVersion: DSH_VERSION,
   checkCli: false,
   officialOnly: true,
-  roots: {
-    profile: { path: baseline, importer: 'baselines/dsh-0.1.5-rc.2' },
-    shared: { path: baseline, importer: 'baselines/dsh-0.1.5-rc.2' },
-  },
+  roots: { baseline: root },
   packages: [
-    ...sharedPackages.map(([name, version]) => ({
-      root: 'shared', name, version, direct: false, checkManifest: true,
+    ...verificationSharedDependencies.map(([name, version]) => ({
+      root: 'baseline', name, version, direct: false, checkManifest: true,
     })),
-    ...profilePackages.map(([name, version]) => ({
-      root: 'profile', name, version, direct: false, checkManifest: true,
-      support: name.startsWith('@modelcontextprotocol/'),
+    ...installationTargets.map(([name, version]) => ({
+      root: 'baseline', name, version, direct: false, checkManifest: true,
+      installationTarget: true,
+    })),
+    ...supportDependencies.map(([name, version]) => ({
+      root: 'baseline', name, version, direct: false, checkManifest: true,
+      support: true,
     })),
   ],
   patchDependencies: [
-    { from: '@deepseek-ai/dsh-mcp-client', specifier: '@modelcontextprotocol/client' },
+    { from: '@deepseek-ai/dsh-llm-pi-ai', packageName: '@earendil-works/pi-ai' },
+    { from: '@deepseek-ai/dsh-mcp-client', packageName: '@modelcontextprotocol/client' },
     { from: '@deepseek-ai/dsh-mcp-client', specifier: '@modelcontextprotocol/client/stdio' },
-    { from: '@deepseek-ai/dsh-mcp-client', specifier: '@modelcontextprotocol/core' },
+    { from: '@deepseek-ai/dsh-mcp-client', packageName: '@modelcontextprotocol/core' },
   ],
   patches: [
     'subagent-settlement',

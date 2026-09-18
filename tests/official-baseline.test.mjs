@@ -5,11 +5,11 @@ import { preflightDeployment } from '../src/preflight.mjs'
 import { stagedTest, patchStates } from '../src/patch-kit.mjs'
 import { readFileSync } from 'node:fs'
 import { selectPatches } from '../patches/index.mjs'
-import { profilePackages, sharedPackages } from '../deployments/package-set.mjs'
+import { baselinePackages } from '../deployments/package-set.mjs'
 
 test('baseline dependencies exactly match the intended package set', () => {
   const manifest = JSON.parse(readFileSync(new URL('../baselines/dsh-0.1.5-rc.2/package.json', import.meta.url), 'utf8'))
-  const intended = Object.fromEntries([...sharedPackages, ...profilePackages])
+  const intended = Object.fromEntries(baselinePackages)
   assert.deepEqual(manifest.dependencies, intended)
 })
 

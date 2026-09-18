@@ -2,16 +2,16 @@
 set -euo pipefail
 
 COMMAND="${1:-}"
-DEPLOYMENT="${2:-personal-web-0.1.5-rc.2}"
+DEPLOYMENT="${2:-installation-0.1.5-rc.2}"
 REPO="${DSH_PATCH_REPO:-TTTPOB/dsh-patch-scripts}"
-REF="${DSH_PATCH_REF:-0.1.5-rc.2-1}"
+REF="${DSH_PATCH_REF:-0.1.5-rc.2-2}"
 BASE_URL="${DSH_PATCH_BASE_URL:-https://github.com}"
 CACHE_ROOT="${XDG_CACHE_HOME:-$HOME/.cache}/dsh-patch-scripts"
 
 case "$COMMAND" in
-  doctor|test|apply) ;;
+  prepare-support|doctor|test|apply) ;;
   *)
-    echo "Usage: bootstrap.sh doctor|test|apply [deployment]" >&2
+    echo "Usage: bootstrap.sh prepare-support|doctor|test|apply [deployment]" >&2
     exit 2
     ;;
 esac

@@ -5,10 +5,11 @@ import { pathToFileURL } from 'node:url'
 import { applyPatches, patchStates, stagedTest } from './patch-kit.mjs'
 import { preflightDeployment } from './preflight.mjs'
 import { restoreBackupDir } from './transaction.mjs'
+import { prepareSupport } from './prepare-support.mjs'
 import { patchRegistry, selectPatches } from '../patches/index.mjs'
 
 function usage() {
-  console.error('Usage: node src/cli.mjs <list|doctor|status|test|apply|restore> [--deployment id] [--patch id] [--keep-work] [--backup dir]')
+  console.error('Usage: node src/cli.mjs <list|prepare-support|doctor|status|test|apply|restore> [--deployment id] [--patch id] [--keep-work] [--backup dir]')
   process.exit(2)
 }
 
@@ -32,11 +33,15 @@ async function loadDeployment(id) {
   const path = resolve(new URL('../deployments/', import.meta.url).pathname, `${id}.mjs`)
   if (!existsSync(path)) throw new Error(`unknown deployment: ${id}`)
   const module = await import(pathToFileURL(path))
+  if (module.default.retired !== undefined) throw new Error(`${id}: ${module.default.retired}`)
   return module.default
 }
 
 function printPreflight(deployment, result) {
   console.log(`Deployment: ${deployment.id}`)
+  if (deployment.installation !== undefined) {
+    console.log(`Installation: ${deployment.installation.projectRoot}`)
+  }
   if (result.cli !== undefined) {
     console.log(`DSH: ${result.cli.version} (${result.cli.path})`)
   } else if (!deployment.checkCli) {
@@ -69,7 +74,13 @@ async function main() {
     console.log(`Restored ${files.length} files from ${resolve(options.backup)}`)
     return
   }
-  const deployment = await loadDeployment(options.deployment ?? 'official-0.1.5-rc.2')
+  const deployment = await loadDeployment(options.deployment ?? 'installation-0.1.5-rc.2')
+  if (options.command === 'prepare-support') {
+    const result = prepareSupport(deployment)
+    console.log(`Prepared exact support dependencies in ${result.projectRoot}`)
+    console.log(`Next: node src/cli.mjs doctor --deployment ${deployment.id}`)
+    return
+  }
   const patchIds = options.patches.length > 0 ? options.patches : deployment.patches
   const patches = selectPatches(patchIds)
   const preflight = preflightDeployment(deployment)
