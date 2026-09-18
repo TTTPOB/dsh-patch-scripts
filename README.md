@@ -18,21 +18,21 @@
 固定 tag 的安装检查：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/v0.1.0/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-1/bootstrap.sh \
   | bash -s -- doctor personal-web-0.1.5-rc.2
 ```
 
 在临时副本中测试当前安装，不修改 `~/.dsh`：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/v0.1.0/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-1/bootstrap.sh \
   | bash -s -- test personal-web-0.1.5-rc.2
 ```
 
 测试通过后应用：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/v0.1.0/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-1/bootstrap.sh \
   | bash -s -- apply personal-web-0.1.5-rc.2
 ```
 
@@ -155,7 +155,7 @@ DSH_PATCH_SOURCE_DIR="$PWD" ./bootstrap.sh test official-0.1.5-rc.2
 
 ```sh
 DSH_PATCH_REPO=TTTPOB/dsh-patch-scripts \
-DSH_PATCH_REF=v0.1.0 \
+DSH_PATCH_REF=0.1.5-rc.2-1 \
 DSH_PATCH_BASE_URL=https://github.com \
 ./bootstrap.sh doctor personal-web-0.1.5-rc.2
 ```
