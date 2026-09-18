@@ -63,7 +63,9 @@ test('support preparation pins exact packages in the installation project', () =
     ],
   }
   assert.deepEqual(supportArguments(deployment), [
-    'pnpm@11.24.0', '--dir', '/installation', 'add', '--save-exact',
+    'pnpm@11.24.0', '--dir', '/installation',
+    '--ignore-workspace', '--config.enable-global-virtual-store=false',
+    'add', '--save-exact',
     '@modelcontextprotocol/client@2.0.0', '@modelcontextprotocol/core@2.0.0',
   ])
   let call

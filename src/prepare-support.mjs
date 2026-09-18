@@ -5,6 +5,8 @@ export function supportArguments(deployment) {
   return [
     'pnpm@11.24.0',
     '--dir', deployment.installation.projectRoot,
+    '--ignore-workspace',
+    '--config.enable-global-virtual-store=false',
     'add', '--save-exact',
     ...support.map(pkg => `${pkg.name}@${pkg.version}`),
   ]

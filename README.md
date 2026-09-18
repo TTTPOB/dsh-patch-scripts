@@ -17,6 +17,8 @@
 - `supportDependencies`：必须由 installation 内的 MCP client 自身解析到的精确依赖；
 - `verificationSharedDependencies`：只用于确认官方 DSH dependency closure 的版本。
 
+`0.1.5-rc.2-3` 修复 `prepare-support` 位于父级 pnpm workspace 时误用父级 lockfile 和 virtual store 的问题。该命令固定传入 `--ignore-workspace` 与 `--config.enable-global-virtual-store=false`，让 support package 的 lock importer 和 `node_modules/.pnpm` 都留在 DSH installation project；仍使用 pnpm 默认的用户级全局 store/cache，不创建项目内 store/cache。
+
 ## 从旧版迁移（只需一次）
 
 旧版 `personal-web-0.1.5-rc.2` 已停用，避免继续静默修改 profile-local 副本。
@@ -24,7 +26,7 @@
 1. 先把两个 MCP support package 精确安装到当前 DSH installation：
 
    ```sh
-   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-2/bootstrap.sh \
+   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-3/bootstrap.sh \
      | bash -s -- prepare-support installation-0.1.5-rc.2
    ```
 
@@ -44,17 +46,17 @@
 3. 检查、staged test，然后应用：
 
    ```sh
-   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-2/bootstrap.sh \
+   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-3/bootstrap.sh \
      | bash -s -- doctor installation-0.1.5-rc.2
 
-   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-2/bootstrap.sh \
+   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-3/bootstrap.sh \
      | bash -s -- test installation-0.1.5-rc.2
 
-   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-2/bootstrap.sh \
+   curl -fsSL https://raw.githubusercontent.com/TTTPOB/dsh-patch-scripts/0.1.5-rc.2-3/bootstrap.sh \
      | bash -s -- apply installation-0.1.5-rc.2
    ```
 
-`prepare-support` 只在当前 DSH installation project 运行一次精确的 `pnpm add --save-exact`。`apply` 会再次执行 preflight 和 staged test；脚本不会重启 Host，也不会修改 profile。
+`prepare-support` 只在当前 DSH installation project 运行一次精确的 `pnpm --ignore-workspace --config.enable-global-virtual-store=false add --save-exact`。完成顺序固定为 `prepare-support` → `doctor` → `test` → `apply` → 从外部终端重启 Host。`apply` 会再次执行 preflight 和 staged test；脚本不会重启 Host，也不会修改 profile。
 
 ## Installation 定位与检查
 
@@ -85,6 +87,12 @@ corepack pnpm@11.24.0 install --frozen-lockfile
 corepack pnpm@11.24.0 test
 corepack pnpm@11.24.0 test:official
 corepack pnpm@11.24.0 check
+```
+
+父级 workspace 回归是独立网络集成测试，不包含在普通 `test` / `check` 中：
+
+```sh
+corepack pnpm@11.24.0 test:installation
 ```
 
 官方 baseline 是独立测试 deployment，不会写真实 installation：
@@ -129,7 +137,7 @@ DSH_PATCH_SOURCE_DIR="$PWD" ./bootstrap.sh test official-0.1.5-rc.2
 
 ```sh
 DSH_PATCH_REPO=TTTPOB/dsh-patch-scripts \
-DSH_PATCH_REF=0.1.5-rc.2-2 \
+DSH_PATCH_REF=0.1.5-rc.2-3 \
 DSH_PATCH_BASE_URL=https://github.com \
 ./bootstrap.sh doctor installation-0.1.5-rc.2
 ```
